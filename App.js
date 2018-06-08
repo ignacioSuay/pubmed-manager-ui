@@ -1,23 +1,20 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import AppContainer from './src/components/AppContainer'
+import reducer from './src/reducers/reducer';
+import {createStore} from 'redux'
+import {Provider} from 'react-redux';
+import Amplify from 'aws-amplify';
+import aws_exports from './src/aws-exports';
 
-export default class App extends React.Component {
-  render() {
-    return (
-      <View style={styles.container}>
-        <Text>Open up App.js to start working on your app!</Text>
-        <Text>Changes you make will automatically reload.</Text>
-        <Text>Shake your phone to open the developer menu.</Text>
-      </View>
-    );
-  }
-}
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+Amplify.configure(aws_exports);
+const store = createStore(reducer);
+
+const app = () => (
+
+    <Provider store={store}>
+        <AppContainer/>
+    </Provider>
+);
+
+export default app;
