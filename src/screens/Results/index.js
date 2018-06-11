@@ -24,24 +24,16 @@ export default class Results extends React.PureComponent {
         console.log("fetching" + term);
         fetch('https://g3ws5fq4m5.execute-api.eu-west-1.amazonaws.com/dev/publications?term=' + term + '&startPage=' + start + '&endPage=' + end)
             .then(response => response.json())
-            .then(responseJson => {
-                const pubs = responseJson.map(resp => {
-                    resp["key"] = resp.uid;
-                    return resp;
-                });
-                console.log(pubs);
-                this.setState({publications: pubs});
-            }).catch(error => {
-            console.log(error)
-        });
+            .then(responseJson => this.setState({publications: responseJson}))
+            .catch(error => console.log(error));
     };
 
     _renderItem = ({item}) => (
         <PublicationItem
             id={item.uid}
             onPressItem={this._onPressItem}
-            // selected={!!this.state.selected.get(item.uid)}
-            selected={true}
+            selected={this.state.selected[item.uid]}
+            // selected={true}
             title={item.title}
         />
     );
@@ -50,22 +42,30 @@ export default class Results extends React.PureComponent {
         // updater functions are preferred for transactional updates
         this.setState((state) => {
             // copy the map rather than modifying state.
-            const selected = new Map(state.selected);
-            selected.set(id, !selected.get(id)); // toggle
+            const selected = state.selected;
+            selected.id = true;
             return {selected};
         });
+        console.log("PRESSING id : " + JSON.stringify(id));
+        this.props.navigation.navigate('Details', {id: id});
+
+    };
+
+    renderSeparator = () => {
+        return (<View style={styles.separator}/>);
     };
 
 
-    render() {
-        // const { navigation } = this.props;
-        // const term = navigation.getParam('term');
-        console.log("details loading...");
+    componentDidMount(){
         const {navigation} = this.props;
         const term = navigation.getParam('term');
-        console.log("term " + term);
-        console.log("pub size  " + this.state.publications);
+        this.fetchData(term, 1, 20);
+    }
 
+    render() {
+        const {navigation} = this.props;
+        const term = navigation.getParam('term');
+        console.log("results loading...");
         return (
             <View style={styles.container}>
                 <Text>Search term: {term}</Text>
@@ -74,12 +74,10 @@ export default class Results extends React.PureComponent {
                     <FlatList
                         data={this.state.publications}
                         renderItem={this._renderItem}
-                        keyExtractor = {(item, index) => index.toString()}
+                        keyExtractor={item => item.uid}
                         extraData={this.state}
+                        ItemSeparatorComponent={this.renderSeparator}
                     />
-                    {/*<Button title="Fetch data" onPress={e => console.log("holaaaa!")}/>*/}
-
-                    <Button title="Fetch data" onPress={() => this.fetchData(term, 1, 20)}/>
                 </View>
             </View>
 
@@ -104,6 +102,14 @@ const styles = StyleSheet.create({
         width: 200,
         margin: 3,
         padding: 10
+    },
+    separator: {
+        height: 1,
+        width: "86%",
+        backgroundColor: "#CED0CE",
+        marginLeft: "14%",
+        marginBottom: "2%",
+        marginTop: "2%"
     }
 });
 

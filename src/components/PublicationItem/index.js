@@ -6,9 +6,8 @@ export default class PublicationItem extends React.PureComponent {
 
     _onPress = () => {
         console.log("Pressed item with id: " + this.props.id);
-        this.props.onPressItem(this.props.id);
+        this.props.onPressItem(this.props.id)
     };
-
 
     render() {
         const textColor = this.props.selected ? "red" : "black";

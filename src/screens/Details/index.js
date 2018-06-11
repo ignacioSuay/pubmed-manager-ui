@@ -30,13 +30,12 @@ export default class Details extends React.Component {
 
     render() {
         console.log("details loading...");
+        const {navigation} = this.props;
+        const id = navigation.getParam('id');
         return (
             <View style={styles.container}>
-                <Text>{this.state.data}</Text>
+                <Text> Loading id: {id}</Text>
 
-                <View style={styles.top}>
-                    <Button title="Fetch data" onPress={this.fetchData}/>
-                </View>
             </View>
 
         );
