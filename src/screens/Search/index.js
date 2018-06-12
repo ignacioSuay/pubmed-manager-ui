@@ -1,8 +1,75 @@
 import React from 'react';
-import {StyleSheet, Text, Button, View, TextInput} from 'react-native';
+import {Button, Keyboard, StyleSheet, Text, TextInput, TouchableWithoutFeedback, View} from 'react-native';
+import filterConfig from '../../config/filters.config';
 
 
 export default class Search extends React.PureComponent {
+
+    state = {};
+
+    constructor(props) {
+        super(props);
+    };
+
+    setUserProps(key, value) {
+        this.setState({
+            [key]: value
+        });
+    }
+
+    buildTerm() {
+        let res = "";
+
+        Object.entries(this.state).forEach(entry => {
+            if(entry[1]) {
+                res += entry[1] + entry[0] + " AND ";
+            }
+        });
+
+        res = res.replace(/AND\s$/, "").trim().replace(/\s/g, "+");
+        return res;
+    }
+
+    search() {
+        const searchTerm = this.buildTerm();
+        console.log("RESULTADO " + searchTerm);
+
+        this.props.navigation.navigate('Results', {term: searchTerm});
+    }
+
+    render() {
+        return (
+            <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+
+                <View style={styles.container}>
+                    <View style={styles.top}>
+                        <TextInput style={styles.input} onChangeText={value => {
+                            this.setUserProps("[All fields]", value)
+                        }} placeholder={"Search..."}/>
+                    </View>
+
+                    <View>
+                        {
+                            filterConfig.map((filter, index) => (
+                                <View key={index}>
+                                    <Text>{filter.name}</Text>
+                                    <TextInput style={styles.input} placeholder={filter.name} onChangeText={value => {
+                                        this.setUserProps(filter.filter, value)
+                                    }}/>
+                                </View>
+                            ))
+                        }
+                    </View>
+
+                    <View style={styles.bottom}>
+                        <Button title="Search" onPress={this.search.bind(this)}/>
+                    </View>
+
+                </View>
+            </TouchableWithoutFeedback>
+
+        );
+    }
 
     static navigationOptions = {
         title: 'Search',
@@ -10,41 +77,6 @@ export default class Search extends React.PureComponent {
             backgroundColor: '#2b80c4'
         }
     };
-
-    constructor(props) {
-        super(props);
-        this.state = {
-            term: ""
-        };
-    };
-
-    setUserProps(key, value) {
-        this.setState({
-            [key]: value
-        })
-    }
-
-    search(){
-        this.props.navigation.navigate('Results', {term: this.state.term});
-    }
-
-    render() {
-        return (
-            <View style={styles.container}>
-                <Text>Search</Text>
-                <View style={styles.top}>
-                    <TextInput style={styles.input} onChangeText={value => {
-                        this.setUserProps("term", value)
-                    }} placeholder={"Search..."}/>
-                </View>
-
-                <View style={styles.bottom}>
-                    <Button title="Search" onPress={this.search.bind(this)}/>
-                </View>
-            </View>
-
-        );
-    }
 }
 
 const styles = StyleSheet.create({
@@ -56,15 +88,14 @@ const styles = StyleSheet.create({
     },
     top: {
         flex: 1,
-        alignItems: 'center',
-        margin: 30
+        alignItems: 'center'
     },
     bottom: {
         flex: 4,
         width: 200,
         margin: 3,
         padding: 10,
-        alignItems: 'flex-start',
+        alignItems: 'center',
     },
     input: {
         fontSize: 20,
