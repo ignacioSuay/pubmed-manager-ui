@@ -33,12 +33,12 @@ export default class Results extends React.PureComponent {
             id={item.uid}
             onPressItem={this._onPressItem}
             selected={this.state.selected[item.uid]}
-            // selected={true}
+            item={item}
             title={item.title}
         />
     );
 
-    _onPressItem = (id) => {
+    _onPressItem = (id, item) => {
         // updater functions are preferred for transactional updates
         this.setState((state) => {
             // copy the map rather than modifying state.
@@ -47,7 +47,7 @@ export default class Results extends React.PureComponent {
             return {selected};
         });
         console.log("PRESSING id : " + JSON.stringify(id));
-        this.props.navigation.navigate('Details', {id: id});
+        this.props.navigation.navigate('Details', {id: id, publication: item});
 
     };
 
