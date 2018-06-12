@@ -32,10 +32,11 @@ export default class Details extends React.Component {
         console.log("details loading...");
         const {navigation} = this.props;
         const id = navigation.getParam('id');
+        const publication = navigation.getParam('publication');
         return (
             <View style={styles.container}>
                 <Text> Loading id: {id}</Text>
-
+                <Text>{JSON.stringify(publication)}</Text>
             </View>
 
         );
