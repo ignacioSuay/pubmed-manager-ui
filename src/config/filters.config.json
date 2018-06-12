@@ -1,0 +1,22 @@
+[
+  {
+    "name": "Affiliation",
+    "filter": "[Affiliation]",
+    "type": "text"
+  },
+  {
+    "name": "Author",
+    "filter": "[Author]",
+    "type": "text"
+  },
+  {
+    "name": "Title",
+    "filter": "[Title]",
+    "type": "text"
+  },
+  {
+    "name": "Publication date",
+    "filter": "[Date - Publication]",
+    "type": "date"
+  }
+]
