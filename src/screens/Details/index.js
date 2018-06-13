@@ -5,7 +5,7 @@ import {StyleSheet, Text, Button, View, TextInput} from 'react-native';
 export default class Details extends React.Component {
 
     static navigationOptions = {
-        title: 'Details!',
+        title: 'Details',
         headerStyle: {
             backgroundColor: '#2b80c4'
         }
@@ -50,16 +50,5 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-start',
         paddingTop: 30
     },
-    top: {
-        flex: 2,
-        alignItems: 'center',
-        margin: 30
-    },
-    bottom: {
-        flex: 1,
-        width: 200,
-        margin: 3,
-        padding: 10
-    }
 });
 
