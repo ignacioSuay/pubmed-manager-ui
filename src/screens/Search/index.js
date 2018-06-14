@@ -1,14 +1,25 @@
 import React from 'react';
-import {Button, Keyboard, StyleSheet, TouchableWithoutFeedback, View, TouchableHighlight} from 'react-native';
+import {
+    Button,
+    Keyboard,
+    KeyboardAvoidingView,
+    ScrollView,
+    StyleSheet,
+    TouchableWithoutFeedback,
+    View
+} from 'react-native';
 import {Hoshi} from 'react-native-textinput-effects';
 import filterConfig from '../../config/filters.config'
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+
 
 
 export default class Search extends React.PureComponent {
 
     state = {
         term: {},
-        showBasicFilters: false
+        showBasicFilters: false,
+        showAdvancedFilters: false
     };
 
     constructor(props) {
@@ -37,44 +48,79 @@ export default class Search extends React.PureComponent {
         this.props.navigation.navigate('Results', {term: searchTerm});
     }
 
-    showFilters(visibility) {
-        this.setState({showBasicFilters: visibility});
+    showFilters(visibility, isBasic) {
+        if (isBasic) {
+            this.setState({showBasicFilters: visibility});
+        } else {
+            this.setState({showAdvancedFilters: visibility});
+        }
     }
 
     render() {
         return (
-            <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+            <KeyboardAwareScrollView enableOnAndroid={true}>
 
-                <View style={styles.container}>
+                        <View style={styles.input}>
+                            <Hoshi label={'Search...'} borderColor={'#2b80c4'}
+                                   onChangeText={value => this.setUserProps("[All fields]", value)}/>
+                        </View>
+                        <View style={styles.filtersButtons}>
+                            {!this.state.showBasicFilters &&
+                            <Button title="+ Filters" onPress={() => this.showFilters(true, true)}/>}
 
-                    <View style={styles.input}>
-                        <Hoshi label={'Search...'} borderColor={'#2b80c4'}
-                               onChangeText={value => this.setUserProps("[All fields]", value)}/>
-                    </View>
+                            {this.state.showBasicFilters &&
+                            <Button style={styles.minusFilter} color={'#ff3246'} title="- Filters"
+                                    onPress={() => this.showFilters(false, true)}/>}
+                        </View>
 
-                    <View style={styles.filtersButtons}>
-                        {!this.state.showBasicFilters && <Button title="+ Filters" onPress={() => this.showFilters(true)}/>}
-                        {this.state.showBasicFilters && <Button style={styles.minusFilter} color={'#ff3246'} title="- Filters" onPress={()=> this.showFilters(false)}/>}
-                    </View>
+                        <View style={styles.search}>
+                            <Button title="Search" onPress={this.search.bind(this)}/>
+                        </View>
 
-                    <View style={styles.search}>
-                        <Button title="Search" onPress={this.search.bind(this)}/>
-                    </View>
+                        {this.renderBasicFilters()}
 
-                    {this.renderFilters()}
+                        {this.state.showBasicFilters &&
+                        <View style={styles.search}>
+                            <Button title="Search" onPress={this.search.bind(this)}/>
+                        </View>}
+                        <View style={{height: 520}}/>
 
-                </View>
-            </TouchableWithoutFeedback>
-
+            </KeyboardAwareScrollView>
         );
     }
 
-    renderFilters() {
+    renderBasicFilters() {
         if (this.state.showBasicFilters) {
             return (
                 <View style={styles.basicFilters}>
                     {
-                        filterConfig.map((filter, index) => (
+                        filterConfig.basicFilters.map((filter, index) => (
+                            <View key={index} style={styles.input}>
+                                <Hoshi
+                                    label={filter.name} borderColor={'#2b80c4'}
+                                    onChangeText={value => this.setUserProps(filter.filter, value)}/>
+                            </View>))
+                    }
+                    <View style={styles.filtersButtons}>
+                        {!this.state.showAdvancedFilters &&
+                        <Button title="+ Advanced Filters" onPress={() => this.showFilters(true, false)}/>}
+                        {this.state.showAdvancedFilters &&
+                        <Button style={styles.minusFilter} color={'#ff3246'} title="- Advanced Filters"
+                                onPress={() => this.showFilters(false, false)}/>}
+                    </View>
+
+                    {this.renderAdvancedFilters()}
+
+                </View>
+            )
+        }
+    }
+
+    renderAdvancedFilters() {
+        if (this.state.showAdvancedFilters) {
+            return (<View style={styles.basicFilters}>
+                    {
+                        filterConfig.advancedFilters.map((filter, index) => (
                             <View key={index} style={styles.input}>
                                 <Hoshi
                                     label={filter.name} borderColor={'#2b80c4'}
@@ -82,7 +128,6 @@ export default class Search extends React.PureComponent {
                             </View>))
                     }
                 </View>
-
             )
         }
 
@@ -99,35 +144,36 @@ export default class Search extends React.PureComponent {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        alignItems: 'center',
-        justifyContent: 'flex-start'
+        // alignItems: 'center',
+        // justifyContent: 'flex-start'
         // paddingTop: 30
     },
     input: {
         minWidth: 300,
-        margin: 3,
-        padding: 10,
+        margin: 0,
+        padding: 0,
         // minHeight: 50
     },
     basicFilters: {
         flex: 5,
     },
-    filtersButtons:{
+    filtersButtons: {
         padding: 10,
         margin: 10,
         alignSelf: 'flex-end'
     },
-    plusFilter:{
+    plusFilter: {
 
         backgroundColor: '#2b80c4'
     },
-    minusFilter:{
+    minusFilter: {
         padding: 10,
         color: '#ff3246'
     },
-    search:{
-        justifyContent: 'flex-start',
-        alignItems: 'flex-start'
+    search: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        margin: 20
     }
 });
 
