@@ -1,22 +1,41 @@
-[
-  {
-    "name": "Affiliation",
-    "filter": "[Affiliation]",
-    "type": "text"
-  },
-  {
-    "name": "Author",
-    "filter": "[Author]",
-    "type": "text"
-  },
-  {
-    "name": "Title",
-    "filter": "[Title]",
-    "type": "text"
-  },
-  {
-    "name": "Publication date",
-    "filter": "[Date - Publication]",
-    "type": "date"
-  }
-]
+{
+  "basicFilters": [
+    {
+      "name": "Author",
+      "filter": "[Author]",
+      "type": "text"
+    },
+    {
+      "name": "Title",
+      "filter": "[Title]",
+      "type": "text"
+    },
+    {
+      "name": "Publication date",
+      "filter": "[Date - Publication]",
+      "type": "date"
+    }
+  ],
+  "advancedFilters": [
+    {
+      "name": "Affiliation",
+      "filter": "[Affiliation]",
+      "type": "text"
+    },
+    {
+      "name": "Author",
+      "filter": "[Author]",
+      "type": "text"
+    },
+    {
+      "name": "Title",
+      "filter": "[Title]",
+      "type": "text"
+    },
+    {
+      "name": "Publication date",
+      "filter": "[Date - Publication]",
+      "type": "date"
+    }
+  ]
+}
