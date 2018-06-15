@@ -2,40 +2,215 @@
   "basicFilters": [
     {
       "name": "Author",
-      "filter": "[Author]",
+      "filter": "[AU]",
       "type": "text"
     },
     {
       "name": "Title",
-      "filter": "[Title]",
+      "filter": "[TI]",
+      "type": "text"
+    },
+    {
+      "name": "Pubmed Id (PMID)",
+      "filter": "[PMID]",
       "type": "text"
     },
     {
       "name": "Publication date",
-      "filter": "[Date - Publication]",
+      "filter": "[DP]",
       "type": "date"
+    },
+    {
+      "name": "Journal",
+      "filter": "[TA]",
+      "type": "text"
+    },
+    {
+      "name": "Language",
+      "filter": "[LA]",
+      "type": "text"
+    },
+    {
+      "name": "Last Author",
+      "filter": "[LASTAU]",
+      "type": "text"
     }
   ],
   "advancedFilters": [
     {
       "name": "Affiliation",
+      "filter": "[AD]",
+      "type": "text"
+    },
+    {
+      "name": "Article Identifier",
+      "filter": "[AID]",
+      "type": "text"
+    },
+    {
+      "name": "Author Identifier",
+      "filter": "[AUID]",
+      "type": "text"
+    },
+    {
+      "name": "Book",
+      "filter": "[book]",
+      "type": "text"
+    },
+    {
+      "name": "Corporate Author",
+      "filter": "[CN]",
+      "type": "text"
+    },
+    {
+      "name": "Create Date",
+      "filter": "[CRDT]",
+      "type": "date"
+    },
+    {
+      "name": "Completion Date",
+      "filter": "[DCOM]",
+      "type": "date"
+    },
+    {
+      "name": "Conflict of Interest",
+      "filter": "[COIS]",
+      "type": "text"
+    },
+    {
+      "name": "EC/RN Number",
+      "filter": "[RN]",
+      "type": "text"
+    },
+    {
+      "name": "Editor",
+      "filter": "[ED]",
+      "type": "text"
+    },
+    {
+      "name": "Entrez Date",
+      "filter": "[EDAT]",
+      "type": "text"
+    },
+    {
+      "name": "First Author Name",
+      "filter": "[1AU]",
+      "type": "text"
+    },
+    {
+      "name": "Full Author Name",
+      "filter": "[FAU]",
+      "type": "text"
+    },
+    {
+      "name": "Full Investigator Name",
+      "filter": "[FIR]",
+      "type": "text"
+    },
+    {
+      "name": "Grant Number ",
+      "filter": "[GR]",
+      "type": "text"
+    },
+    {
+      "name": "Investigator",
+      "filter": "[IR]",
+      "type": "text"
+    },
+    {
+      "name": "ISBN",
+      "filter": "[ISBN]",
+      "type": "text"
+    },
+    {
+      "name": "Location ID",
+      "filter": "[LID]",
+      "type": "text"
+    },
+    {
+      "name": "Modification Date",
+      "filter": "[LR]",
+      "type": "text"
+    },
+    {
+      "name": "NLM Unique ID",
+      "filter": "[JID]",
+      "type": "text"
+    },
+    {
+      "name": "Other Term",
+      "filter": "[OT]",
+      "type": "text"
+    },
+    {
+      "name": "Pagination",
+      "filter": "[PG]",
+      "type": "text"
+    },
+    {
+      "name": "Personal Name as Subject",
+      "filter": "[PS]",
+      "type": "text"
+    },
+    {
+      "name": "Pharmacological Action",
+      "filter": "[PA]",
+      "type": "text"
+    },
+    {
+      "name": "Place of Publication",
+      "filter": "[PL]",
+      "type": "text"
+    },
+    {
+      "name": "Publisher",
+      "filter": "[PUBN]",
+      "type": "text"
+    },
+    {
+      "name": "Publication Date",
+      "filter": "[DP]",
+      "type": "text"
+    },
+    {
+      "name": "Publication Type",
+      "filter": "[PT]",
+      "type": "text"
+    },
+    {
+      "name": "Secondary Source ID",
+      "filter": "[SI]",
+      "type": "text"
+    },
+    {
+      "name": "Subset",
+      "filter": "[SB]",
+      "type": "text"
+    },
+    {
+      "name": "Supplementary Concept",
+      "filter": "[NM]",
+      "type": "text"
+    },
+    {
+      "name": "Text Words",
+      "filter": "[TW]",
+      "type": "text"
+    },
+    {
+      "name": "Title/Abstract",
+      "filter": "[TIAB]",
+      "type": "text"
+    },
+    {
+      "name": "Transliterated Title",
       "filter": "[Affiliation]",
       "type": "text"
     },
     {
-      "name": "Author",
-      "filter": "[Author]",
+      "name": "Volume",
+      "filter": "[VI]",
       "type": "text"
-    },
-    {
-      "name": "Title",
-      "filter": "[Title]",
-      "type": "text"
-    },
-    {
-      "name": "Publication date",
-      "filter": "[Date - Publication]",
-      "type": "date"
     }
   ]
 }
