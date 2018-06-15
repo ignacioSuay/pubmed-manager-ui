@@ -1,17 +1,8 @@
 import React from 'react';
-import {
-    Button,
-    Keyboard,
-    KeyboardAvoidingView,
-    ScrollView,
-    StyleSheet,
-    TouchableWithoutFeedback,
-    View
-} from 'react-native';
+import {Button, StyleSheet, View} from 'react-native';
 import {Hoshi} from 'react-native-textinput-effects';
 import filterConfig from '../../config/filters.config'
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
-
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view'
 
 
 export default class Search extends React.PureComponent {
@@ -58,32 +49,33 @@ export default class Search extends React.PureComponent {
 
     render() {
         return (
-            <KeyboardAwareScrollView enableOnAndroid={true}>
+            <KeyboardAwareScrollView enableOnAndroid={true} extraHeight={110} extraScrollHeight={110}
+                                     style={styles.container}>
 
-                        <View style={styles.input}>
-                            <Hoshi label={'Search...'} borderColor={'#2b80c4'}
-                                   onChangeText={value => this.setUserProps("[All fields]", value)}/>
-                        </View>
-                        <View style={styles.filtersButtons}>
-                            {!this.state.showBasicFilters &&
-                            <Button title="+ Filters" onPress={() => this.showFilters(true, true)}/>}
+                <View style={styles.input}>
+                    <Hoshi label={'Search...'} borderColor={'#2b80c4'}
+                           onChangeText={value => this.setUserProps("[All fields]", value)}/>
+                </View>
+                <View style={styles.filtersButtons}>
+                    {!this.state.showBasicFilters &&
+                    <Button title="+ Filters" onPress={() => this.showFilters(true, true)}/>}
 
-                            {this.state.showBasicFilters &&
-                            <Button style={styles.minusFilter} color={'#ff3246'} title="- Filters"
-                                    onPress={() => this.showFilters(false, true)}/>}
-                        </View>
+                    {this.state.showBasicFilters &&
+                    <Button style={styles.minusFilter} color={'#ff3246'} title="- Filters"
+                            onPress={() => this.showFilters(false, true)}/>}
+                </View>
 
-                        <View style={styles.search}>
-                            <Button title="Search" onPress={this.search.bind(this)}/>
-                        </View>
+                <View style={styles.search}>
+                    <Button title="Search" onPress={this.search.bind(this)}/>
+                </View>
 
-                        {this.renderBasicFilters()}
+                {this.renderBasicFilters()}
 
-                        {this.state.showBasicFilters &&
-                        <View style={styles.search}>
-                            <Button title="Search" onPress={this.search.bind(this)}/>
-                        </View>}
-                        <View style={{height: 520}}/>
+                {this.state.showBasicFilters &&
+                <View style={styles.search}>
+                    <Button title="Search" onPress={this.search.bind(this)}/>
+                </View>}
+                <View style={{height: 520}}/>
 
             </KeyboardAwareScrollView>
         );
@@ -144,6 +136,7 @@ export default class Search extends React.PureComponent {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        margin: 10
         // alignItems: 'center',
         // justifyContent: 'flex-start'
         // paddingTop: 30
