@@ -75,7 +75,6 @@ export default class Search extends React.PureComponent {
                 <View style={styles.search}>
                     <Button title="Search" onPress={this.search.bind(this)}/>
                 </View>}
-                <View style={{height: 520}}/>
 
             </KeyboardAwareScrollView>
         );
@@ -86,12 +85,27 @@ export default class Search extends React.PureComponent {
             return (
                 <View style={styles.basicFilters}>
                     {
-                        filterConfig.basicFilters.map((filter, index) => (
-                            <View key={index} style={styles.input}>
-                                <Hoshi
-                                    label={filter.name} borderColor={'#2b80c4'}
-                                    onChangeText={value => this.setUserProps(filter.filter, value)}/>
-                            </View>))
+                        filterConfig.basicFilters.map((filter, index) => {
+                            if (filter.type === "text") {
+                                return <View key={index} style={styles.input}>
+                                    <Hoshi
+                                        label={filter.name} borderColor={'#2b80c4'}
+                                        onChangeText={value => this.setUserProps(filter.filter, value)}/>
+                                </View>
+                            } else if (filter.type === "date") {
+                                return <View key={index} style={styles.dateView}>
+                                    {/*<Text>From:</Text>*/}
+                                    <Hoshi
+                                        label={"From " + filter.name + " (YYYY/MM/DD)"} borderColor={'#2b80c4'}
+                                        onChangeText={value => this.setUserProps(filter.filter, value)}/>
+                                    {/*<Text>To:</Text>*/}
+                                    <Hoshi
+                                        label={"To " + filter.name + " (YYYY/MM/DD)"} borderColor={'#2b80c4'}
+                                        onChangeText={value => this.setUserProps(filter.filter, value)}/>
+                                </View>
+
+                            }
+                        })
                     }
                     <View style={styles.filtersButtons}>
                         {!this.state.showAdvancedFilters &&
@@ -167,6 +181,10 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         margin: 20
+    },
+    dateView: {
+        flexDirection: "column"
     }
+
 });
 
