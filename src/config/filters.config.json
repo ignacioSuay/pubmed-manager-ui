@@ -90,7 +90,7 @@
     {
       "name": "Entrez Date",
       "filter": "[EDAT]",
-      "type": "text"
+      "type": "date"
     },
     {
       "name": "First Author Name",
@@ -130,7 +130,7 @@
     {
       "name": "Modification Date",
       "filter": "[LR]",
-      "type": "text"
+      "type": "date"
     },
     {
       "name": "NLM Unique ID",
@@ -170,7 +170,7 @@
     {
       "name": "Publication Date",
       "filter": "[DP]",
-      "type": "text"
+      "type": "date"
     },
     {
       "name": "Publication Type",
