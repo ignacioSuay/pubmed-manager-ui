@@ -1,8 +1,9 @@
 import React from 'react';
-import {Button, StyleSheet, View} from 'react-native';
+import {Button, StyleSheet, Text, TextInput, View} from 'react-native';
 import {Hoshi} from 'react-native-textinput-effects';
 import filterConfig from '../../config/filters.config'
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view'
+import DatePicker from "react-native-datepicker";
 
 
 export default class Search extends React.PureComponent {
@@ -94,14 +95,21 @@ export default class Search extends React.PureComponent {
                                 </View>
                             } else if (filter.type === "date") {
                                 return <View key={index} style={styles.dateView}>
-                                    {/*<Text>From:</Text>*/}
-                                    <Hoshi
-                                        label={"From " + filter.name + " (YYYY/MM/DD)"} borderColor={'#2b80c4'}
-                                        onChangeText={value => this.setUserProps(filter.filter, value)}/>
-                                    {/*<Text>To:</Text>*/}
-                                    <Hoshi
-                                        label={"To " + filter.name + " (YYYY/MM/DD)"} borderColor={'#2b80c4'}
-                                        onChangeText={value => this.setUserProps(filter.filter, value)}/>
+                                    <Text style={styles.textInput}>{filter.name}</Text>
+                                    <View style={styles.dateInputView}>
+                                        <TextInput style={styles.textInput} placeholder="From:"/>
+                                        <DatePicker format="YYYY/MM/DD" androidMode="spinner" date={this.state.date}
+                                                    placeholder="select date"
+                                                    onDateChange={(date) => {
+                                                        this.setState({date: date})
+                                                    }}/>
+                                        <TextInput style={styles.textInput} placeholder="To: "/>
+                                        <DatePicker format="YYYY/MM/DD" mode="date" androidMode="spinner"
+                                                    placeholder="Present" date={this.state.date}
+                                                    onDateChange={(date) => {
+                                                        this.setState({date: date})
+                                                    }}/>
+                                    </View>
                                 </View>
 
                             }
@@ -183,8 +191,20 @@ const styles = StyleSheet.create({
         margin: 20
     },
     dateView: {
-        flexDirection: "column"
-    }
+        flexDirection: "column",
+        minHeight: 10
+    },
+    dateInputView: {
+        flexDirection: "row",
+        // margin: 2
+    },
+    textInput: {
+        flex: 1,
+        padding: 0,
+        color: '#6a7989',
+        fontSize: 18,
+        fontWeight: 'bold',
+    },
 
 });
 
