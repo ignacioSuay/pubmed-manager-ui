@@ -71,3 +71,5 @@ awsmobilejs/\#current-backend-info
 
 #idea
 .idea/
+*.idea
+*.expo
