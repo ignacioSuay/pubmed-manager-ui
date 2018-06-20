@@ -10,6 +10,7 @@ export default class Search extends React.PureComponent {
 
     state = {
         term: {},
+        dates: {},
         showBasicFilters: false,
         showAdvancedFilters: false
     };
@@ -32,7 +33,30 @@ export default class Search extends React.PureComponent {
         });
 
         res = res.replace(/AND\s$/, "").trim().replace(/\s/g, "+");
+        if (Object.keys(this.state.dates).length !== 0) {
+            res += "AND" + this.buildDates();
+        }
         return res;
+    }
+
+    buildDates() {
+
+        let res = "";
+        Object.entries(this.state.dates).forEach(entry => {
+            if (entry[0].includes("from")) {
+                const fieldName = entry[0].substring(entry[0].indexOf("from") + 4);
+                const toKey = "to" + fieldName;
+                if (this.state.dates[toKey]) {
+                    res += "(" + entry[1] + fieldName + ":" + this.state.dates[toKey] + fieldName + ") AND ";
+                } else {
+                    res += "(" + entry[1] + fieldName + ":3000" + fieldName + ") AND ";
+                }
+
+            }
+        });
+        res = res.replace(/AND\s$/, "").trim().replace(/\s/g, "+");
+        return res;
+
     }
 
     search() {
@@ -98,16 +122,17 @@ export default class Search extends React.PureComponent {
                                     <Text style={styles.textInput}>{filter.name}</Text>
                                     <View style={styles.dateInputView}>
                                         <TextInput style={styles.textInput} placeholder="From:"/>
-                                        <DatePicker format="YYYY/MM/DD" androidMode="spinner" date={this.state.date}
+                                        <DatePicker format="YYYY/MM/DD" androidMode="spinner"
+                                                    date={this.state.dates["from" + filter.filter]}
                                                     placeholder="select date"
                                                     onDateChange={(date) => {
-                                                        this.setState({date: date})
+                                                        this.onChangeDate(filter, date, "from");
                                                     }}/>
                                         <TextInput style={styles.textInput} placeholder="To: "/>
                                         <DatePicker format="YYYY/MM/DD" mode="date" androidMode="spinner"
-                                                    placeholder="Present" date={this.state.date}
+                                                    placeholder="Present" date={this.state.dates["to" + filter.filter]}
                                                     onDateChange={(date) => {
-                                                        this.setState({date: date})
+                                                        this.onChangeDate(filter, date, "to");
                                                     }}/>
                                     </View>
                                 </View>
@@ -128,6 +153,11 @@ export default class Search extends React.PureComponent {
                 </View>
             )
         }
+    }
+
+    onChangeDate(filter, date, prefix) {
+        const key = prefix + filter.filter;
+        this.setState({dates: Object.assign({}, this.state.dates, {[key]: date})});
     }
 
     renderAdvancedFilters() {
