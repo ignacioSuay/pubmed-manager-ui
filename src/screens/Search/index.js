@@ -1,240 +1,123 @@
 import React from 'react';
-import {Button, StyleSheet, Text, TextInput, View} from 'react-native';
+import {Button, View} from 'react-native';
 import {Hoshi} from 'react-native-textinput-effects';
 import filterConfig from '../../config/filters.config'
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view'
-import DatePicker from "react-native-datepicker";
-
+import styles from './styles'
+import DateFilter from "../../components/DateFilter";
+import {buildTerm} from './searchService'
 
 export default class Search extends React.PureComponent {
 
-    state = {
-        term: {},
-        dates: {},
-        showBasicFilters: false,
-        showAdvancedFilters: false
-    };
+  state = {
+    term: {},
+    dates: {},
+    showBasicFilters: false,
+    showAdvancedFilters: false
+  };
 
-    constructor(props) {
-        super(props);
-    };
+  constructor(props) {
+    super(props);
+  };
 
-    setUserProps(key, value) {
-        this.setState({term: Object.assign({}, this.state.term, {[key]: value})});
+  setUserProps(key, value) {
+    this.setState({term: Object.assign({}, this.state.term, {[key]: value})});
+  }
+
+  search() {
+    const searchTerm = buildTerm(this.state.term, this.state.dates);
+    this.props.navigation.navigate('Results', {term: searchTerm});
+  }
+
+  showFilters(visibility, isBasic) {
+    isBasic ? this.setState({showBasicFilters: visibility}) : this.setState({showAdvancedFilters: visibility});
+  }
+
+  onChangeDate(filter, date, prefix) {
+    const key = prefix + filter.filter;
+    this.setState({dates: Object.assign({}, this.state.dates, {[key]: date})});
+  }
+
+  render() {
+    return (
+      <KeyboardAwareScrollView enableOnAndroid={true} extraHeight={110} extraScrollHeight={110}
+                               style={styles.container}>
+
+        <View style={styles.input}>
+          <Hoshi label={'Search...'} borderColor={'#2b80c4'}
+                 onChangeText={value => this.setUserProps("[All fields]", value)}/>
+        </View>
+        {this.showHideFilters("+ filters", "- filters", true)}
+
+        <View style={styles.search}>
+          <Button title="Search" onPress={this.search.bind(this)}/>
+        </View>
+
+        {this.renderBasicFilters()}
+
+        {this.state.showBasicFilters &&
+        <View style={styles.search}>
+          <Button title="Search" onPress={this.search.bind(this)}/>
+        </View>}
+
+      </KeyboardAwareScrollView>
+    );
+  }
+
+  showHideFilters(showText, hideText, isBasic) {
+    const checkVar = isBasic ? this.state.showBasicFilters : this.state.showAdvancedFilters;
+    return <View style={styles.filtersButtons}>
+      {!checkVar &&
+      <Button title={showText} onPress={() => this.showFilters(true, isBasic)}/>}
+
+      {checkVar &&
+      <Button style={styles.minusFilter} color={'#ff3246'} title={hideText}
+              onPress={() => this.showFilters(false, isBasic)}/>}
+    </View>
+  }
+
+  renderBasicFilters() {
+    if (this.state.showBasicFilters) {
+      return (
+        <View style={styles.basicFilters}>
+          {filterConfig.basicFilters.map((filter, index) => this.renderFilters(filter, index))}
+          {this.showHideFilters("+ Advanced filters", "- Advanced filters", false)}
+          {this.renderAdvancedFilters()}
+        </View>
+      )
     }
+  }
 
-    buildTerm() {
-        let res = "";
-
-        Object.entries(this.state.term).forEach(entry => {
-            if (entry[1]) {
-                res += entry[1] + entry[0] + " AND ";
-            }
-        });
-
-        res = res.replace(/AND\s$/, "").trim().replace(/\s/g, "+");
-        if (Object.keys(this.state.dates).length !== 0) {
-            res += "AND" + this.buildDates();
-        }
-        return res;
+  renderAdvancedFilters() {
+    if (this.state.showAdvancedFilters) {
+      return (<View style={styles.basicFilters}>
+          {
+            filterConfig.advancedFilters.map((filter, index) => this.renderFilters(filter, index))
+          }
+        </View>
+      )
     }
+  }
 
-    buildDates() {
-
-        let res = "";
-        Object.entries(this.state.dates).forEach(entry => {
-            if (entry[0].includes("from")) {
-                const fieldName = entry[0].substring(entry[0].indexOf("from") + 4);
-                const toKey = "to" + fieldName;
-                if (this.state.dates[toKey]) {
-                    res += "(" + entry[1] + fieldName + ":" + this.state.dates[toKey] + fieldName + ") AND ";
-                } else {
-                    res += "(" + entry[1] + fieldName + ":3000" + fieldName + ") AND ";
-                }
-
-            }
-        });
-        res = res.replace(/AND\s$/, "").trim().replace(/\s/g, "+");
-        return res;
-
+  renderFilters(filter, index) {
+    if (filter.type === "text") {
+      return <View key={index} style={styles.input}>
+        <Hoshi
+          label={filter.name} borderColor={'#2b80c4'}
+          onChangeText={value => this.setUserProps(filter.filter, value)}/>
+      </View>
+    } else if (filter.type === "date") {
+      return <DateFilter key={index} filter={filter} onDateChange={this.onChangeDate.bind(this)}
+                         dateFrom={this.state.dates["from" + filter.filter]}
+                         dateTo={this.state.dates["to" + filter.filter]}/>
     }
+  }
 
-    search() {
-        const searchTerm = this.buildTerm();
-        this.props.navigation.navigate('Results', {term: searchTerm});
+  static navigationOptions = {
+    title: 'Search',
+    headerStyle: {
+      backgroundColor: '#2b80c4'
     }
-
-    showFilters(visibility, isBasic) {
-        if (isBasic) {
-            this.setState({showBasicFilters: visibility});
-        } else {
-            this.setState({showAdvancedFilters: visibility});
-        }
-    }
-
-    render() {
-        return (
-            <KeyboardAwareScrollView enableOnAndroid={true} extraHeight={110} extraScrollHeight={110}
-                                     style={styles.container}>
-
-                <View style={styles.input}>
-                    <Hoshi label={'Search...'} borderColor={'#2b80c4'}
-                           onChangeText={value => this.setUserProps("[All fields]", value)}/>
-                </View>
-                <View style={styles.filtersButtons}>
-                    {!this.state.showBasicFilters &&
-                    <Button title="+ Filters" onPress={() => this.showFilters(true, true)}/>}
-
-                    {this.state.showBasicFilters &&
-                    <Button style={styles.minusFilter} color={'#ff3246'} title="- Filters"
-                            onPress={() => this.showFilters(false, true)}/>}
-                </View>
-
-                <View style={styles.search}>
-                    <Button title="Search" onPress={this.search.bind(this)}/>
-                </View>
-
-                {this.renderBasicFilters()}
-
-                {this.state.showBasicFilters &&
-                <View style={styles.search}>
-                    <Button title="Search" onPress={this.search.bind(this)}/>
-                </View>}
-
-            </KeyboardAwareScrollView>
-        );
-    }
-
-    renderBasicFilters() {
-        if (this.state.showBasicFilters) {
-            return (
-                <View style={styles.basicFilters}>
-                    {
-                        filterConfig.basicFilters.map((filter, index) => {
-                            if (filter.type === "text") {
-                                return <View key={index} style={styles.input}>
-                                    <Hoshi
-                                        label={filter.name} borderColor={'#2b80c4'}
-                                        onChangeText={value => this.setUserProps(filter.filter, value)}/>
-                                </View>
-                            } else if (filter.type === "date") {
-                                return <View key={index} style={styles.dateView}>
-                                    <Text style={styles.textInput}>{filter.name}</Text>
-                                    <View style={styles.dateInputView}>
-                                        <TextInput style={styles.textInput} placeholder="From:"/>
-                                        <DatePicker format="YYYY/MM/DD" androidMode="spinner"
-                                                    date={this.state.dates["from" + filter.filter]}
-                                                    placeholder="select date"
-                                                    onDateChange={(date) => {
-                                                        this.onChangeDate(filter, date, "from");
-                                                    }}/>
-                                        <TextInput style={styles.textInput} placeholder="To: "/>
-                                        <DatePicker format="YYYY/MM/DD" mode="date" androidMode="spinner"
-                                                    placeholder="Present" date={this.state.dates["to" + filter.filter]}
-                                                    onDateChange={(date) => {
-                                                        this.onChangeDate(filter, date, "to");
-                                                    }}/>
-                                    </View>
-                                </View>
-
-                            }
-                        })
-                    }
-                    <View style={styles.filtersButtons}>
-                        {!this.state.showAdvancedFilters &&
-                        <Button title="+ Advanced Filters" onPress={() => this.showFilters(true, false)}/>}
-                        {this.state.showAdvancedFilters &&
-                        <Button style={styles.minusFilter} color={'#ff3246'} title="- Advanced Filters"
-                                onPress={() => this.showFilters(false, false)}/>}
-                    </View>
-
-                    {this.renderAdvancedFilters()}
-
-                </View>
-            )
-        }
-    }
-
-    onChangeDate(filter, date, prefix) {
-        const key = prefix + filter.filter;
-        this.setState({dates: Object.assign({}, this.state.dates, {[key]: date})});
-    }
-
-    renderAdvancedFilters() {
-        if (this.state.showAdvancedFilters) {
-            return (<View style={styles.basicFilters}>
-                    {
-                        filterConfig.advancedFilters.map((filter, index) => (
-                            <View key={index} style={styles.input}>
-                                <Hoshi
-                                    label={filter.name} borderColor={'#2b80c4'}
-                                    onChangeText={value => this.setUserProps(filter.filter, value)}/>
-                            </View>))
-                    }
-                </View>
-            )
-        }
-
-    }
-
-    static navigationOptions = {
-        title: 'Search',
-        headerStyle: {
-            backgroundColor: '#2b80c4'
-        }
-    };
+  };
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        margin: 10
-        // alignItems: 'center',
-        // justifyContent: 'flex-start'
-        // paddingTop: 30
-    },
-    input: {
-        minWidth: 300,
-        margin: 0,
-        padding: 0,
-        // minHeight: 50
-    },
-    basicFilters: {
-        flex: 5,
-    },
-    filtersButtons: {
-        padding: 10,
-        margin: 10,
-        alignSelf: 'flex-end'
-    },
-    plusFilter: {
-
-        backgroundColor: '#2b80c4'
-    },
-    minusFilter: {
-        padding: 10,
-        color: '#ff3246'
-    },
-    search: {
-        justifyContent: 'center',
-        alignItems: 'center',
-        margin: 20
-    },
-    dateView: {
-        flexDirection: "column",
-        minHeight: 10
-    },
-    dateInputView: {
-        flexDirection: "row",
-        // margin: 2
-    },
-    textInput: {
-        flex: 1,
-        padding: 0,
-        color: '#6a7989',
-        fontSize: 18,
-        fontWeight: 'bold',
-    },
-
-});
 
