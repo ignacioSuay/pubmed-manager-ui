@@ -8,7 +8,7 @@ export const buildTerm = (term, dates) => {
     });
 
     if (Object.keys(dates).length !== 0) {
-        res += this.buildDates(dates);
+        res += buildDates(dates);
     }
     return res.replace(/AND\s$/, "").trim().replace(/\s/g, "+");
 };
