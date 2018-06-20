@@ -168,11 +168,6 @@
       "type": "text"
     },
     {
-      "name": "Publication Date",
-      "filter": "[DP]",
-      "type": "date"
-    },
-    {
       "name": "Publication Type",
       "filter": "[PT]",
       "type": "text"
