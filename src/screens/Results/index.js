@@ -1,6 +1,7 @@
 import React from 'react';
 import {FlatList, StyleSheet, Text, View} from 'react-native';
 import PublicationItem from '../../components/PublicationItem'
+import Loader from '../../components/Loader'
 
 export default class Results extends React.PureComponent {
 
@@ -97,14 +98,10 @@ export default class Results extends React.PureComponent {
   }
 
   render() {
-    const {navigation} = this.props;
-    const term = navigation.getParam('term');
-    console.log("results loading...");
     return (
       <View style={styles.container}>
-        <Text>Search term: {term}</Text>
-        <Text>Number results: {this.state.numPubs}</Text>
-        <Text>Loading: {this.state.loading.toString()}</Text>
+        <Loader loading={this.state.loading}/>
+        <Text style={styles.numberResults}>Results found: {this.state.numPubs}</Text>
 
         <View style={styles.top}>
           <FlatList
@@ -148,6 +145,9 @@ const styles = StyleSheet.create({
     marginLeft: "14%",
     marginBottom: "2%",
     marginTop: "2%"
+  },
+  numberResults:{
+    backgroundColor: "#2B80C4"
   }
 });
 
