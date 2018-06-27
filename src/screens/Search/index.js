@@ -44,7 +44,7 @@ export default class Search extends React.PureComponent {
                                style={styles.container}>
 
         <View style={styles.input}>
-          <Hoshi label={'Search...'} borderColor={'#2b80c4'}
+          <Hoshi label={""} borderColor={'#2b80c4'}
                  onChangeText={value => this.setUserProps("[All fields]", value)}/>
         </View>
         {this.showHideFilters("+ filters", "- filters", true)}
