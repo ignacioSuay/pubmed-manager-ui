@@ -101,8 +101,9 @@ export default class Results extends React.PureComponent {
     return (
       <View style={styles.container}>
         <Loader loading={this.state.loading}/>
-        <Text style={styles.numberResults}>Results found: {this.state.numPubs}</Text>
-
+        <View style={styles.numberResultsContainer}>
+          <Text style={styles.numberResults}>Results: {this.state.numPubs.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</Text>
+        </View>
         <View style={styles.top}>
           <FlatList
             data={this.state.publications}
@@ -125,12 +126,12 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'flex-start',
-    paddingTop: 30
+    paddingTop: 10
   },
   top: {
     flex: 2,
     alignItems: 'center',
-    margin: 30
+    margin: 10
   },
   bottom: {
     flex: 1,
@@ -146,8 +147,15 @@ const styles = StyleSheet.create({
     marginBottom: "2%",
     marginTop: "2%"
   },
+  numberResultsContainer:{
+    alignSelf: 'flex-end',
+    margin: 10
+  },
   numberResults:{
-    backgroundColor: "#2B80C4"
+    backgroundColor: "#4B484F",
+    borderRadius: 20,
+    color: 'white',
+    padding: 10,
   }
 });
 
