@@ -5,11 +5,6 @@ export default StyleSheet.create({
         flex: 1,
         margin: 10
     },
-    input: {
-        minWidth: 300,
-        margin: 0,
-        padding: 0,
-    },
     basicFilters: {
         flex: 5,
     },
