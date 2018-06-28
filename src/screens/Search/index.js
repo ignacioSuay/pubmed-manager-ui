@@ -1,14 +1,21 @@
 import React from 'react';
 import {Button, View} from 'react-native';
-import {Hoshi} from 'react-native-textinput-effects';
 import filterConfig from '../../config/filters.config'
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view'
 import styles from './styles'
 import DateFilter from "../../components/DateFilter";
 import {buildTerm} from './searchService'
+import {Icon, Input} from "react-native-elements";
+
 
 export default class Search extends React.PureComponent {
 
+  static navigationOptions = {
+    title: 'Search',
+    headerStyle: {
+      backgroundColor: '#2b80c4'
+    }
+  };
   state = {
     term: {},
     dates: {},
@@ -26,6 +33,7 @@ export default class Search extends React.PureComponent {
 
   search() {
     const searchTerm = buildTerm(this.state.term, this.state.dates);
+    console.log("term" + searchTerm);
     this.props.navigation.navigate('Results', {term: searchTerm});
   }
 
@@ -41,27 +49,48 @@ export default class Search extends React.PureComponent {
   render() {
     return (
       <KeyboardAwareScrollView enableOnAndroid={true} extraHeight={110} extraScrollHeight={110}
-                               style={styles.container}>
+                               style={styles.container} keyboardShouldPersistTaps="always">
+        <View style={{margin: 10}}>
+          <View style={styles.input}>
 
-        <View style={styles.input}>
-          <Hoshi label={""} borderColor={'#2b80c4'}
-                 onChangeText={value => this.setUserProps("[All fields]", value)}/>
+            {this.createFilter("[All fields]", null, "Search")}
+
+          </View>
+          {this.showHideFilters("+ filters", "- filters", true)}
+
+          <View style={styles.search}>
+            <Button title="Search" onPress={this.search.bind(this)}/>
+          </View>
+
+          {this.renderBasicFilters()}
+
+          {this.state.showBasicFilters &&
+          <View style={styles.search}>
+            <Button title="Search" onPress={this.search.bind(this)}/>
+          </View>}
         </View>
-        {this.showHideFilters("+ filters", "- filters", true)}
-
-        <View style={styles.search}>
-          <Button title="Search" onPress={this.search.bind(this)}/>
-        </View>
-
-        {this.renderBasicFilters()}
-
-        {this.state.showBasicFilters &&
-        <View style={styles.search}>
-          <Button title="Search" onPress={this.search.bind(this)}/>
-        </View>}
 
       </KeyboardAwareScrollView>
     );
+  }
+
+  createFilter(filter, label, placeholder) {
+    return <Input
+      placeholder={placeholder}
+      label={label}
+      onChangeText={value => this.setUserProps(filter, value)}
+      ref={input => this[filter] = input}
+      leftIcon={<Icon name='search'/>}
+      containerStyle={{width: "100%"}}
+      rightIcon={
+        <Icon
+          name='clear'
+          onPress={() => {
+            this[filter].clear();
+            this.setUserProps(filter, "")
+          }}
+        />}
+    />;
   }
 
   showHideFilters(showText, hideText, isBasic) {
@@ -101,10 +130,8 @@ export default class Search extends React.PureComponent {
 
   renderFilters(filter, index) {
     if (filter.type === "text") {
-      return <View key={index} style={styles.input}>
-        <Hoshi
-          label={filter.name} borderColor={'#2b80c4'}
-          onChangeText={value => this.setUserProps(filter.filter, value)}/>
+      return <View key={index}>
+        {this.createFilter(filter.filter, filter.name, filter.name)}
       </View>
     } else if (filter.type === "date") {
       return <DateFilter key={index} filter={filter} onDateChange={this.onChangeDate.bind(this)}
@@ -112,12 +139,5 @@ export default class Search extends React.PureComponent {
                          dateTo={this.state.dates["to" + filter.filter]}/>
     }
   }
-
-  static navigationOptions = {
-    title: 'Search',
-    headerStyle: {
-      backgroundColor: '#2b80c4'
-    }
-  };
 }
 
