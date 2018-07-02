@@ -1,6 +1,7 @@
 import React from 'react';
 import {StyleSheet, Text, View, Linking, ScrollView} from 'react-native';
 import Loader from "../../components/Loader";
+import Button from "react-native-elements/src/buttons/Button";
 
 
 export default class Details extends React.Component {
@@ -86,14 +87,9 @@ export default class Details extends React.Component {
           <Text>
             <Text style={{fontWeight: "bold"}}>Source:</Text> {publication.source}
           </Text>
-          <Text onPress={() => Linking.openURL(pubUrl)}>
-            <Text style={{fontWeight: "bold"}}>Url:</Text> <Text style={{color: 'blue'}}>{pubUrl}</Text>
-          </Text>
-
-
+          <Text onPress={() => Linking.openURL(pubUrl)} style={styles.linkButton}>Visit on Pubmed</Text>
+          <Text style={styles.title}>Abstract</Text>
           <Text style={styles.abstract}> {details.abstract}</Text>
-          {/*<Text>{JSON.stringify(publication)}</Text>*/}
-          {/*<Text>{JSON.stringify(details)}</Text>*/}
           <View style={{height: 50}}/>
 
         </ScrollView>
@@ -129,7 +125,20 @@ const styles = StyleSheet.create({
     flex: 1,
     margin: 2,
   },
-  abstract: {}
+  linkButton:{
+    backgroundColor: "#2B80C4",
+    borderRadius: 20,
+    color: 'white',
+    padding: 14,
+    margin: 20,
+    fontSize: 16,
+    fontWeight: "bold",
+    alignSelf: "center",
+  },
+  abstract: {
+    fontSize: 16,
+    textAlign: "justify"
+  }
 
 });
 
