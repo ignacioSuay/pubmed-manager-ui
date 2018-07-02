@@ -21,10 +21,10 @@ export default class DateFilter extends React.PureComponent {
                     date={dateFrom}
                     placeholder="select date"
                     onDateChange={date => this.props.onDateChange(filter, date, "from")}
-                    showIcon={false}/>
+                    showIcon={false} style={styles.datePicker}/>
         <Text style={styles.textInput}> To:</Text>
         <DatePicker format="YYYY/MM/DD" mode="date" androidMode="spinner"
-                    placeholder="Present" date={dateTo}
+                    placeholder="Present" date={dateTo} style={styles.datePicker}
                     onDateChange={date => this.props.onDateChange(filter, date, "to")} showIcon={false}/>
       </View>
     </View>
@@ -35,18 +35,22 @@ export default class DateFilter extends React.PureComponent {
 const styles = StyleSheet.create({
   dateView: {
     flexDirection: "column",
-    minHeight: 10
+    minHeight: 10,
+    marginRight: 10,
   },
   dateInputView: {
+    alignItems: "center",
     flexDirection: "row",
   },
   textInput: {
-    flex: 1,
     padding: 0,
     color: '#6a7989',
     fontSize: 16,
-    minWidth: 45,
     fontWeight: 'bold',
-    marginBottom: 5
+    marginBottom: 5,
+    marginRight: 5
   },
+  datePicker:{
+    flex: 1
+  }
 });
