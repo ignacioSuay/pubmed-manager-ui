@@ -53,7 +53,7 @@ export default class Results extends React.PureComponent {
   buildUrl() {
     const {term, page} = this.state;
     const resultsPerPage = 20;
-    const start = (page * resultsPerPage) + 1;
+    const start = page * resultsPerPage;
     let url = 'https://g3ws5fq4m5.execute-api.eu-west-1.amazonaws.com/dev/publications?term=' + term + '&startPage=' + start + '&endPage=' + resultsPerPage;
     if (this.state.webEnv && this.state.queryKey) {
       url += `&webEnv=${this.state.webEnv}&queryKey=${this.state.queryKey}`
