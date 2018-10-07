@@ -23,4 +23,6 @@ note: if you an error in the simulator like: "Cannot connect with the debugger",
 
 ~/Library/Android/sdk/emulator/emulator @Pixel_XL_API_25
 
-aws cognito-idp admin-initiate-auth --user-pool-id eu-west-1_abVtWoVjK --client-id 69aqtkcd8rhpd9j02h4vc1493u --auth-flow ADMIN_NO_SRP_AUTH --auth-parameters USERNAME=suay,PASSWORD=xxx --region eu-west-1
+ ~/Android/Sdk/emulator/emulator -list-avds
+ ~/Android/Sdk/emulator/emulator @Pixel_XL_API_28
+

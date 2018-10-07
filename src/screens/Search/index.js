@@ -50,25 +50,25 @@ export default class Search extends React.PureComponent {
     return (
       <KeyboardAwareScrollView enableOnAndroid={true} extraHeight={110} extraScrollHeight={110}
                                style={styles.container} keyboardShouldPersistTaps="always">
-        <View style={{margin: 10}}>
-          <View style={styles.input}>
+          <View style={{margin: 10}}>
+              <View style={styles.input}>
 
-            {this.createFilter("[All fields]", null, "Search")}
+                  {this.createFilter("[All fields]", null, "Search")}
+
+              </View>
+              {this.showHideFilters("+ filters", "- filters", true)}
+              <View style={styles.search}>
+                  <Button title="Search" onPress={this.search.bind(this)}/>
+              </View>
+
+              {this.renderBasicFilters()}
+
+              {this.state.showBasicFilters &&
+              <View style={styles.search}>
+                  <Button title="Search" onPress={this.search.bind(this)}/>
+              </View>}
 
           </View>
-          {this.showHideFilters("+ filters", "- filters", true)}
-
-          <View style={styles.search}>
-            <Button title="Search" onPress={this.search.bind(this)}/>
-          </View>
-
-          {this.renderBasicFilters()}
-
-          {this.state.showBasicFilters &&
-          <View style={styles.search}>
-            <Button title="Search" onPress={this.search.bind(this)}/>
-          </View>}
-        </View>
 
       </KeyboardAwareScrollView>
     );

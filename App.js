@@ -4,7 +4,7 @@ import reducer from './src/reducers/reducer';
 import {createStore} from 'redux'
 import {Provider} from 'react-redux';
 import Amplify from 'aws-amplify';
-import aws_exports from './src/aws-exports';
+import aws_exports from './aws-exports';
 
 
 Amplify.configure(aws_exports);
