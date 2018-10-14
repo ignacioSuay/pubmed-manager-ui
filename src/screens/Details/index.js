@@ -1,7 +1,8 @@
 import React from 'react';
 import {StyleSheet, Text, View, Linking, ScrollView} from 'react-native';
 import Loader from "../../components/Loader";
-import Button from "react-native-elements/src/buttons/Button";
+import {Icon} from "react-native-elements";
+import DeviceInfo from "react-native-device-info";
 
 
 export default class Details extends React.Component {
@@ -37,11 +38,31 @@ export default class Details extends React.Component {
             .then(responseJson => {
                 console.log(responseJson);
                 this.setState({details: responseJson, loading: false});
-            }).catch(error => this.setState({loading: false}));
+            })
+            .catch(error => {
+                this.setState({loading: false});
+                console.log(error)
+            });
     };
 
     isEmpty(str) {
         return (!str || 0 === str.length);
+    }
+
+    saveFavorite() {
+        const uniqueId = Expo.Constants.deviceId;
+        console.log("saving favorite!", uniqueId);
+        const url = `https://g3ws5fq4m5.execute-api.eu-west-1.amazonaws.com/dev/favorites`;
+        const {publication} = this.state;
+        const body = {id: uniqueId, item: publication};
+        fetch(url, {
+            method: 'POST',
+            body: JSON.stringify(body)
+        }).then(() => console.log("saved favorite"))
+            .catch(error => {
+                console.log("Error saving favorites", error);
+            });
+        console.log("adding to favorites");
     }
 
 
@@ -92,7 +113,10 @@ export default class Details extends React.Component {
                     <Text>
                         <Text style={{fontWeight: "bold"}}>Source:</Text> {publication.source}
                     </Text>
-                    <Text onPress={() => Linking.openURL(pubUrl)} style={styles.linkButton}>Visit on Pubmed</Text>
+                    <View style={{flexDirection: "row"}}>
+                        <Text onPress={this.saveFavorite.bind(this)} style={styles.saveButton}>Save to favorites</Text>
+                        <Text onPress={() => Linking.openURL(pubUrl)} style={styles.linkButton}>Visit on Pubmed</Text>
+                    </View>
                     {!this.isEmpty(details.abstract) &&
                     <View>
                         <Text style={styles.title}>Abstract</Text>
@@ -135,6 +159,17 @@ const styles = StyleSheet.create({
     },
     linkButton: {
         backgroundColor: "#2B80C4",
+        borderRadius: 20,
+        color: 'white',
+        padding: 14,
+        margin: 20,
+        fontSize: 16,
+        fontWeight: "bold",
+        alignSelf: "center",
+    },
+
+    saveButton: {
+        backgroundColor: "#f80f31",
         borderRadius: 20,
         color: 'white',
         padding: 14,
