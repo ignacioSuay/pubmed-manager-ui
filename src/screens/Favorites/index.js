@@ -2,6 +2,10 @@ import React from "react";
 import {FlatList, StyleSheet, Text, View} from "react-native";
 import PublicationItem from "../../components/PublicationItem";
 import Loader from "../../components/Loader";
+import {Icon} from "react-native-elements";
+
+const constants = require('../../config/constants.json');
+
 
 export default class Favorite extends React.Component {
 
@@ -28,7 +32,7 @@ export default class Favorite extends React.Component {
     }
 
     fetchData = () => {
-        let url = 'https://g3ws5fq4m5.execute-api.eu-west-1.amazonaws.com/dev/favorites/'+ Expo.Constants.deviceId;
+        let url = constants.server.url + 'favorites/' + Expo.Constants.deviceId;
         fetch(url)
             .then(response => response.json())
             .then(responseJson => this.setState({publications: responseJson, loading: false}))
@@ -36,17 +40,35 @@ export default class Favorite extends React.Component {
     };
 
     _renderItem = ({item}) => (
-        <PublicationItem
-            id={item.uid}
-            onPressItem={this._onPressItem}
-            selected={this.state.selected[item.uid]}
-            item={item}
-            title={item.title}
-            authors={item.authors}
-            type={item.pubtype}
-            date={item.pubdate}
-        />
+        <View style={{flexDirection: "row"}}>
+            <PublicationItem
+                id={item.uid}
+                onPressItem={this._onPressItem}
+                selected={this.state.selected[item.uid]}
+                item={item}
+                title={item.title}
+                authors={item.authors}
+                type={item.pubtype}
+                date={item.pubdate}
+            />
+            <Icon name='clear' onPress={() => this.deleteFavorite(item.uid)}/>
+        </View>
+
     );
+
+    deleteFavorite(publicationId) {
+        const deviceId = Expo.Constants.deviceId;
+        console.log("deleting: " + publicationId + " " + deviceId);
+        const url = constants.server.url + `favorites/` + deviceId + "/" + publicationId;
+        fetch(url, {
+            method: 'DELETE'
+        }).then(() => {
+            console.log("delete favorite");
+            this.componentDidMount();
+        }).catch(error => {
+                console.log("Error saving favorites", error);
+            });
+    }
 
     _onPressItem = (id, item) => {
         this.setState((state) => {
