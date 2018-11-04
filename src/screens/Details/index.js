@@ -3,7 +3,7 @@ import {StyleSheet, Text, View, Linking, ScrollView} from 'react-native';
 import Loader from "../../components/Loader";
 import {Icon} from "react-native-elements";
 import DeviceInfo from "react-native-device-info";
-
+const constants = require('../../config/constants.json');
 
 export default class Details extends React.Component {
 
@@ -31,7 +31,7 @@ export default class Details extends React.Component {
     }
 
     fetchData = () => {
-        const url = `https://g3ws5fq4m5.execute-api.eu-west-1.amazonaws.com/dev/publications/${this.state.id}`;
+        const url = constants.server.url + `publications/${this.state.id}`;
         console.log(url);
         fetch(url)
             .then(response => response.json())
@@ -52,7 +52,7 @@ export default class Details extends React.Component {
     saveFavorite() {
         const uniqueId = Expo.Constants.deviceId;
         console.log("saving favorite!", uniqueId);
-        const url = `https://g3ws5fq4m5.execute-api.eu-west-1.amazonaws.com/dev/favorites`;
+        const url = constants.server.url + `favorites`;
         const {publication} = this.state;
         const body = {id: uniqueId, item: publication};
         fetch(url, {
@@ -113,7 +113,7 @@ export default class Details extends React.Component {
                     <Text>
                         <Text style={{fontWeight: "bold"}}>Source:</Text> {publication.source}
                     </Text>
-                    <View style={{flexDirection: "row"}}>
+                    <View style={styles.linkButtonsView}>
                         <Text onPress={this.saveFavorite.bind(this)} style={styles.saveButton}>Save to favorites</Text>
                         <Text onPress={() => Linking.openURL(pubUrl)} style={styles.linkButton}>Visit on Pubmed</Text>
                     </View>
@@ -157,31 +157,34 @@ const styles = StyleSheet.create({
         flex: 1,
         margin: 2,
     },
+
     linkButton: {
         backgroundColor: "#2B80C4",
         borderRadius: 20,
         color: 'white',
-        padding: 14,
-        margin: 20,
-        fontSize: 16,
+        padding: 10,
+        fontSize: 14,
         fontWeight: "bold",
         alignSelf: "center",
     },
-
     saveButton: {
         backgroundColor: "#f80f31",
         borderRadius: 20,
         color: 'white',
-        padding: 14,
-        margin: 20,
-        fontSize: 16,
+        padding: 10,
+        fontSize: 14,
         fontWeight: "bold",
         alignSelf: "center",
     },
     abstract: {
         fontSize: 16,
         textAlign: "justify"
+    },
+    linkButtonsView: {
+        flexDirection: "row",
+        justifyContent: "space-evenly",
+        marginTop: 10,
+        marginBottom: 10
     }
-
 });
 
