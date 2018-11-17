@@ -3,9 +3,13 @@ import {StyleSheet, Text, View, Linking, ScrollView} from 'react-native';
 import Loader from "../../components/Loader";
 import {Icon} from "react-native-elements";
 import DeviceInfo from "react-native-device-info";
+import * as store from "react-redux";
+import {addPublication} from "../../actions/publication.actions";
+import {connect} from "react-redux";
+
 const constants = require('../../config/constants.json');
 
-export default class Details extends React.Component {
+class Details extends React.Component {
 
     static navigationOptions = {
         title: 'Details',
@@ -58,7 +62,10 @@ export default class Details extends React.Component {
         fetch(url, {
             method: 'POST',
             body: JSON.stringify(body)
-        }).then(() => console.log("saved favorite"))
+        }).then(() => {
+            console.log("saved favorite");
+            this.props.dispatch(addPublication(publication))
+        })
             .catch(error => {
                 console.log("Error saving favorites", error);
             });
@@ -188,3 +195,10 @@ const styles = StyleSheet.create({
     }
 });
 
+const mapDispatchToProps = (dispatch) => {
+    return {
+        dispatch: dispatch
+    }
+};
+
+export default connect(state => state, mapDispatchToProps)(Details);
