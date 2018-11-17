@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "devDependencies": {
-    "jest": "^23.1.0",
+    "jest": "23.6.0",
     "jest-expo": "~26.0.0",
     "react-native-scripts": "1.13.2",
     "react-test-renderer": "16.3.0"
@@ -24,7 +24,7 @@
     "aws-amplify-react-native": "^0.2.15",
     "expo": "^26.0.0",
     "react": "16.3.0",
-    "react-native": "~0.54.1",
+    "react-native": "^0.57.5",
     "react-native-datepicker": "^1.7.2",
     "react-native-elements": "1.0.0-beta5",
     "react-native-keyboard-aware-scroll-view": "^0.5.0",
