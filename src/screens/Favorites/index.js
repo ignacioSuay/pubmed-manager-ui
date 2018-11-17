@@ -3,11 +3,13 @@ import {FlatList, StyleSheet, Text, View} from "react-native";
 import PublicationItem from "../../components/PublicationItem";
 import Loader from "../../components/Loader";
 import {Icon} from "react-native-elements";
+import {connect} from "react-redux";
+import {loadedPublications, removePublication} from "../../actions/publication.actions";
 
 const constants = require('../../config/constants.json');
 
 
-export default class Favorite extends React.Component {
+class Favorite extends React.Component {
 
     static navigationOptions = {
         title: 'Favorites',
@@ -17,7 +19,6 @@ export default class Favorite extends React.Component {
     };
 
     state = {
-        publications: [],
         selected: {},
         page: 0,
         loading: false
@@ -28,14 +29,18 @@ export default class Favorite extends React.Component {
     };
 
     componentDidMount() {
-        this.setState({loading: true}, () => this.fetchData())
+        this.setState({loading: true});
+        this.props.dispatch(this.fetchData)
     }
 
-    fetchData = () => {
+    fetchData = (dispatch) => {
         let url = constants.server.url + 'favorites/' + Expo.Constants.deviceId;
         fetch(url)
             .then(response => response.json())
-            .then(responseJson => this.setState({publications: responseJson, loading: false}))
+            .then(publications => {
+                this.setState({loading: false});
+                dispatch(loadedPublications(publications));
+            })
             .catch(error => console.log(error));
     };
 
@@ -51,24 +56,24 @@ export default class Favorite extends React.Component {
                 type={item.pubtype}
                 date={item.pubdate}
             />
-            <Icon name='clear' onPress={() => this.deleteFavorite(item.uid)}/>
+            <Icon name='clear'
+                  onPress={() => this.props.dispatch(dispatch => this.deleteFavorite(item.uid, dispatch))}/>
         </View>
 
     );
 
-    deleteFavorite(publicationId) {
+    deleteFavorite = (publicationId, dispatch) => {
         const deviceId = Expo.Constants.deviceId;
-        console.log("deleting: " + publicationId + " " + deviceId);
         const url = constants.server.url + `favorites/` + deviceId + "/" + publicationId;
         fetch(url, {
             method: 'DELETE'
         }).then(() => {
-            console.log("delete favorite");
-            this.componentDidMount();
+            console.log("deleted favorite");
+            dispatch(removePublication(publicationId));
         }).catch(error => {
-                console.log("Error saving favorites", error);
-            });
-    }
+            console.log("Error saving favorites", error);
+        });
+    };
 
     _onPressItem = (id, item) => {
         this.setState((state) => {
@@ -83,23 +88,15 @@ export default class Favorite extends React.Component {
         return (<View style={styles.separator}/>);
     };
 
-    handleLoadMore() {
-        if (!this.state.loading) {
-            this.setState({page: this.state.page + 1, loading: true}, () => this.fetchData());
-        }
-    }
-
     render() {
         return (
             <View style={styles.container}>
                 <Loader loading={this.state.loading}/>
                 <FlatList
-                    data={this.state.publications}
+                    data={this.props.publications}
                     renderItem={this._renderItem}
                     keyExtractor={item => item.uid}
                     ItemSeparatorComponent={this.renderSeparator}
-                    onEndReached={this.handleLoadMore.bind(this)}
-                    onEndReachedThreshold={0.1}
                 />
             </View>
         );
@@ -129,3 +126,18 @@ const styles = StyleSheet.create({
         padding: 10,
     }
 });
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        dispatch: dispatch
+    }
+};
+
+// const mapStateToProps = (state) => {
+//     console.log("state has changed");
+//   return {
+//       publications: state.publications
+//   }
+// };
+
+export default connect(state => state, mapDispatchToProps)(Favorite);
