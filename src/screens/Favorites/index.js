@@ -55,9 +55,11 @@ class Favorite extends React.Component {
                 authors={item.authors}
                 type={item.pubtype}
                 date={item.pubdate}
+                source={item.source}
             />
-            <Icon name='clear'
-                  onPress={() => this.props.dispatch(dispatch => this.deleteFavorite(item.uid, dispatch))}/>
+            <View style={styles.removeContainer}>
+                <Icon name='clear' iconStyle={{color: "white", textAlign: "center"}} onPress={() => this.props.dispatch(dispatch => this.deleteFavorite(item.uid, dispatch))}/>
+            </View>
         </View>
 
     );
@@ -124,6 +126,13 @@ const styles = StyleSheet.create({
         borderRadius: 20,
         color: 'white',
         padding: 10,
+    },
+    removeContainer:{
+        backgroundColor: "#6b686f",
+        borderRadius: 30,
+        width: 30,
+        height: 30,
+        justifyContent: "center"
     }
 });
 
