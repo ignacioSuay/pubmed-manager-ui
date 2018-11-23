@@ -74,6 +74,7 @@ export default class Results extends React.PureComponent {
             authors={item.authors}
             type={item.pubtype}
             date={item.pubdate}
+            source={item.source}
         />
     );
 
@@ -121,7 +122,7 @@ export default class Results extends React.PureComponent {
 
 const styles = StyleSheet.create({
     container: {
-        paddingTop: 10
+        // paddingTop: 10
     },
     separator: {
         height: 1,
@@ -132,14 +133,12 @@ const styles = StyleSheet.create({
         marginTop: "2%"
     },
     numberResultsContainer: {
-        alignSelf: 'flex-end',
-        marginBottom: 10
+        backgroundColor: "#4B484F"
     },
     numberResults: {
-        backgroundColor: "#4B484F",
-        borderRadius: 20,
         color: 'white',
         padding: 10,
+        alignSelf: "center"
     }
 });
 
