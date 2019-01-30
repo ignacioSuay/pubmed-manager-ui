@@ -123,7 +123,7 @@ class Details extends React.Component {
                         <Text style={{fontWeight: "bold"}}>Source:</Text> {publication.source}
                     </Text>
                     <View style={styles.linkButtonsView}>
-                        <Button onPress={this.saveFavorite.bind(this)} buttonStyle={styles.saveButton} disabled={this.state.alreadySaved} title="Save to favorites"/>
+                        <Button onPress={this.saveFavorite.bind(this)} buttonStyle={styles.saveButton} disabled={this.state.alreadySaved} disabledStyle={styles.disabledButton} title="Save to favorites"/>
                         <Button onPress={() => Linking.openURL(pubUrl)} buttonStyle={styles.linkButton} title="Visit on Pubmed"/>
                     </View>
                     {!this.isEmpty(details.abstract) &&
@@ -173,6 +173,9 @@ const styles = StyleSheet.create({
     },
     saveButton: {
         backgroundColor: "#f80f31",
+        borderRadius: 20,
+    },
+    disabledButton: {
         borderRadius: 20,
     },
     abstract: {
