@@ -4,7 +4,6 @@
     "name": "Pubmed manager",
     "slug": "pubmed-manager",
     "icon": "icons/icon_pubmed_manager_512.png",
-    "version": "0.0.1",
-    "buildNumber": "0.0.1"
+    "version": "0.0.1"
   }
 }
