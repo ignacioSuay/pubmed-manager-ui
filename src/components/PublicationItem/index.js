@@ -14,34 +14,27 @@ export default class PublicationItem extends React.PureComponent {
         const authors = this.props.authors.map(a => a.name).join(", ");
         return (
             <TouchableOpacity style={styles.itemContainer} onPress={this._onPress}>
-                <View style={{flex: 20}}>
-                    <View style={styles.pubTypeView}>
-                        <Text style={styles.pubType}>
-                            {this.props.type.join(", ")}
-                        </Text>
-                    </View>
-                </View>
 
-                <View style={{flex: 80}}>
-                    <Text style={styles.title}>
-                        {this.props.title}
-                    </Text>
-                    <Text style={styles.authors}>
-                        {authors}
-                    </Text>
-                    <View style={styles.bottom}>
-                        <View style={styles.source}>
-                            <Text>{this.props.source}</Text>
-                        </View>
-                        <View style={styles.pubDate}>
-                            <Text style={styles.pubDateText}>{this.props.date}</Text>
-                        </View>
+                <Text style={styles.title}>
+                    {this.props.title}
+                </Text>
+                <Text style={styles.authors}>
+                    {authors}
+                </Text>
+                <View style={styles.pubTypeView}>
+                    {this.props.type.map(pt => <Text key={pt} style={styles.pubType}>{pt}</Text>)}
+                </View>
+                <View style={styles.bottom}>
+                    <View style={styles.source}>
+                        <Text>{this.props.source}</Text>
+                    </View>
+                    <View style={styles.pubDate}>
+                        <Text style={styles.pubDateText}>{this.props.date}</Text>
                     </View>
                 </View>
             </TouchableOpacity>
         );
     }
-
 }
 
 
@@ -50,10 +43,14 @@ const styles = StyleSheet.create({
         marginTop: 5,
         marginBottom: 5,
         flex: 1,
-        flexDirection: "row"
+        // flexDirection: "row"
     },
     title: {
-        fontWeight: "bold"
+        fontWeight: "bold",
+        textAlign: "center"
+        // backgroundColor: "#19576c",
+        // color: "white"
+
     },
     authors: {
         color: "#6a7989"
@@ -62,30 +59,35 @@ const styles = StyleSheet.create({
         flexDirection: "row"
     },
     pubTypeView: {
-        flex: 1,
-        justifyContent: "center",
-        // alignItems: "center",
-        // alignContent: "space-between",
-        backgroundColor: "#1c7189",
-        borderRadius: 40,
-        margin: 4
-    },
-    pubType: {
-        alignSelf: "center",
+        flexDirection: "row"
+        // flex: 1,
         // justifyContent: "center",
         // alignItems: "center",
-        color: "white",
-        textAlign: "center"
-        // margin: 10
+        // alignContent: "space-between",
+        // backgroundColor: "#1c7189",
+        // borderRadius: 40,
+        // margin: 4
+    },
+    pubType: {
+        alignSelf: "flex-start",
+        // justifyContent: "center",
+        // alignItems: "center",
+        // color: "white",
+        // textAlign: "center"
+        backgroundColor: "#c5c9c9",
+        padding: 5,
+        borderRadius: 10,
+        marginLeft: 3
 
     },
     pubDate: {
         flex: 1,
         margin: 2,
+        alignContent: "flex-end"
 
     },
     source: {
-        flex: 3,
+        flex: 2,
         margin: 2,
     },
     pubDateText: {
