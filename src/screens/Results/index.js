@@ -133,7 +133,7 @@ const styles = StyleSheet.create({
         marginTop: "2%"
     },
     numberResultsContainer: {
-        backgroundColor: "#4B484F"
+        backgroundColor: "#323036"
     },
     numberResults: {
         color: 'white',
